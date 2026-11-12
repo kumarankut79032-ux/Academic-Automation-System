@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script>
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+const SUPABASE_KEY = "sb_publishable_YOUR_KEY_HERE";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     tailwind.config = {
       theme: {
         extend: {
@@ -123,8 +126,8 @@
             Connect Your Live Supabase Project
           </h4>
           <pre class="p-3.5 rounded-xl bg-slate-900 text-slate-100 text-xs font-mono overflow-x-auto leading-relaxed">// Inside AcademicAPI in index.html:
-const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
+const SUPABASE_URL = "https://zyaacsgsimuwngsawvoi.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
 // Replace localStorage calls with supabase.from('table').select/insert()</pre>
         </div>
       </div>
@@ -379,404 +382,91 @@ const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
      * =========================================================================
      */
     const AcademicAPI = {
-      STORAGE_KEY: 'eduflow_cse_5th_sem_db_v1',
+  // 1. Register new user in Supabase Auth + 'users' table
+  async register({ fullName, email, password, role, rollNo }) {
+    const { data, error } = await sb.auth.signUp({ email, password });
+    if (error) throw new Error(error.message);
 
-      SUBJECTS: [
-        'Software Engineering',
-        'Operating Systems',
-        'Database Management Systems',
-        'Compiler Design'
-      ],
-
-      /**
-       * Initializes realistic 5th-semester CSE seed data if localStorage is empty.
-       */
-      init() {
-        const existing = localStorage.getItem(this.STORAGE_KEY);
-        if (existing) return;
-
-        const seedData = {
-          users: [
-            {
-              id: 'fac-01',
-              name: 'Dr. Rajesh Kumar',
-              email: 'faculty@cse.edu.in',
-              role: 'faculty',
-              department: 'Computer Science & Engineering'
-            },
-            {
-              id: 'stu-01',
-              name: 'Aarav Sharma',
-              email: 'aarav.sharma@cse.edu.in',
-              role: 'student',
-              roll_no: '21CS001'
-            },
-            {
-              id: 'stu-02',
-              name: 'Priya Verma',
-              email: 'priya.verma@cse.edu.in',
-              role: 'student',
-              roll_no: '21CS002'
-            },
-            {
-              id: 'stu-03',
-              name: 'Rohan Das',
-              email: 'rohan.das@cse.edu.in',
-              role: 'student',
-              roll_no: '21CS003'
-            },
-            {
-              id: 'stu-04',
-              name: 'Sneha Nair',
-              email: 'sneha.nair@cse.edu.in',
-              role: 'student',
-              roll_no: '21CS004'
-            },
-            {
-              id: 'stu-05',
-              name: 'Vikram Singh',
-              email: 'vikram.singh@cse.edu.in',
-              role: 'student',
-              roll_no: '21CS005'
-            }
-          ],
-          attendance: [
-            // Software Engineering (4 sessions -> Aarav 4/4 = 100%)
-            { id: 'att-1', student_id: 'stu-01', subject: 'Software Engineering', date: '2026-11-04', status: 'Present' },
-            { id: 'att-2', student_id: 'stu-02', subject: 'Software Engineering', date: '2026-11-04', status: 'Present' },
-            { id: 'att-3', student_id: 'stu-03', subject: 'Software Engineering', date: '2026-11-04', status: 'Absent' },
-            { id: 'att-4', student_id: 'stu-04', subject: 'Software Engineering', date: '2026-11-04', status: 'Present' },
-            { id: 'att-5', student_id: 'stu-05', subject: 'Software Engineering', date: '2026-11-04', status: 'Present' },
-
-            { id: 'att-6', student_id: 'stu-01', subject: 'Software Engineering', date: '2026-11-06', status: 'Present' },
-            { id: 'att-7', student_id: 'stu-02', subject: 'Software Engineering', date: '2026-11-06', status: 'Present' },
-            { id: 'att-8', student_id: 'stu-03', subject: 'Software Engineering', date: '2026-11-06', status: 'Present' },
-            { id: 'att-9', student_id: 'stu-04', subject: 'Software Engineering', date: '2026-11-06', status: 'Absent' },
-            { id: 'att-10', student_id: 'stu-05', subject: 'Software Engineering', date: '2026-11-06', status: 'Present' },
-
-            { id: 'att-11', student_id: 'stu-01', subject: 'Software Engineering', date: '2026-11-10', status: 'Present' },
-            { id: 'att-12', student_id: 'stu-02', subject: 'Software Engineering', date: '2026-11-10', status: 'Absent' },
-            { id: 'att-13', student_id: 'stu-03', subject: 'Software Engineering', date: '2026-11-10', status: 'Present' },
-            { id: 'att-14', student_id: 'stu-04', subject: 'Software Engineering', date: '2026-11-10', status: 'Present' },
-            { id: 'att-15', student_id: 'stu-05', subject: 'Software Engineering', date: '2026-11-10', status: 'Present' },
-
-            // Operating Systems (4 sessions -> Aarav 3/4 = 75%)
-            { id: 'att-16', student_id: 'stu-01', subject: 'Operating Systems', date: '2026-11-03', status: 'Present' },
-            { id: 'att-17', student_id: 'stu-02', subject: 'Operating Systems', date: '2026-11-03', status: 'Present' },
-            { id: 'att-18', student_id: 'stu-03', subject: 'Operating Systems', date: '2026-11-03', status: 'Present' },
-            { id: 'att-19', student_id: 'stu-04', subject: 'Operating Systems', date: '2026-11-03', status: 'Present' },
-            { id: 'att-20', student_id: 'stu-05', subject: 'Operating Systems', date: '2026-11-03', status: 'Absent' },
-
-            { id: 'att-21', student_id: 'stu-01', subject: 'Operating Systems', date: '2026-11-05', status: 'Absent' },
-            { id: 'att-22', student_id: 'stu-02', subject: 'Operating Systems', date: '2026-11-05', status: 'Present' },
-            { id: 'att-23', student_id: 'stu-03', subject: 'Operating Systems', date: '2026-11-05', status: 'Absent' },
-            { id: 'att-24', student_id: 'stu-04', subject: 'Operating Systems', date: '2026-11-05', status: 'Present' },
-            { id: 'att-25', student_id: 'stu-05', subject: 'Operating Systems', date: '2026-11-05', status: 'Present' },
-
-            { id: 'att-26', student_id: 'stu-01', subject: 'Operating Systems', date: '2026-11-08', status: 'Present' },
-            { id: 'att-27', student_id: 'stu-02', subject: 'Operating Systems', date: '2026-11-08', status: 'Present' },
-            { id: 'att-28', student_id: 'stu-03', subject: 'Operating Systems', date: '2026-11-08', status: 'Present' },
-            { id: 'att-29', student_id: 'stu-04', subject: 'Operating Systems', date: '2026-11-08', status: 'Present' },
-            { id: 'att-30', student_id: 'stu-05', subject: 'Operating Systems', date: '2026-11-08', status: 'Present' },
-
-            { id: 'att-31', student_id: 'stu-01', subject: 'Operating Systems', date: '2026-11-11', status: 'Present' },
-            { id: 'att-32', student_id: 'stu-02', subject: 'Operating Systems', date: '2026-11-11', status: 'Present' },
-            { id: 'att-33', student_id: 'stu-03', subject: 'Operating Systems', date: '2026-11-11', status: 'Absent' },
-            { id: 'att-34', student_id: 'stu-04', subject: 'Operating Systems', date: '2026-11-11', status: 'Present' },
-            { id: 'att-35', student_id: 'stu-05', subject: 'Operating Systems', date: '2026-11-11', status: 'Absent' },
-
-            // Database Management Systems (3 sessions -> Aarav 3/3 = 100%)
-            { id: 'att-36', student_id: 'stu-01', subject: 'Database Management Systems', date: '2026-11-04', status: 'Present' },
-            { id: 'att-37', student_id: 'stu-02', subject: 'Database Management Systems', date: '2026-11-04', status: 'Present' },
-            { id: 'att-38', student_id: 'stu-03', subject: 'Database Management Systems', date: '2026-11-04', status: 'Present' },
-            { id: 'att-39', student_id: 'stu-04', subject: 'Database Management Systems', date: '2026-11-04', status: 'Absent' },
-            { id: 'att-40', student_id: 'stu-05', subject: 'Database Management Systems', date: '2026-11-04', status: 'Present' },
-
-            { id: 'att-41', student_id: 'stu-01', subject: 'Database Management Systems', date: '2026-11-09', status: 'Present' },
-            { id: 'att-42', student_id: 'stu-02', subject: 'Database Management Systems', date: '2026-11-09', status: 'Absent' },
-            { id: 'att-43', student_id: 'stu-03', subject: 'Database Management Systems', date: '2026-11-09', status: 'Present' },
-            { id: 'att-44', student_id: 'stu-04', subject: 'Database Management Systems', date: '2026-11-09', status: 'Present' },
-            { id: 'att-45', student_id: 'stu-05', subject: 'Database Management Systems', date: '2026-11-09', status: 'Present' },
-
-            { id: 'att-46', student_id: 'stu-01', subject: 'Database Management Systems', date: '2026-11-12', status: 'Present' },
-            { id: 'att-47', student_id: 'stu-02', subject: 'Database Management Systems', date: '2026-11-12', status: 'Present' },
-            { id: 'att-48', student_id: 'stu-03', subject: 'Database Management Systems', date: '2026-11-12', status: 'Absent' },
-            { id: 'att-49', student_id: 'stu-04', subject: 'Database Management Systems', date: '2026-11-12', status: 'Present' },
-            { id: 'att-50', student_id: 'stu-05', subject: 'Database Management Systems', date: '2026-11-12', status: 'Present' },
-
-            // Compiler Design (3 sessions -> Aarav 2/3 = 66.7% -> Triggers <75% Alert!)
-            { id: 'att-51', student_id: 'stu-01', subject: 'Compiler Design', date: '2026-11-05', status: 'Present' },
-            { id: 'att-52', student_id: 'stu-02', subject: 'Compiler Design', date: '2026-11-05', status: 'Present' },
-            { id: 'att-53', student_id: 'stu-03', subject: 'Compiler Design', date: '2026-11-05', status: 'Present' },
-            { id: 'att-54', student_id: 'stu-04', subject: 'Compiler Design', date: '2026-11-05', status: 'Present' },
-            { id: 'att-55', student_id: 'stu-05', subject: 'Compiler Design', date: '2026-11-05', status: 'Absent' },
-
-            { id: 'att-56', student_id: 'stu-01', subject: 'Compiler Design', date: '2026-11-07', status: 'Absent' },
-            { id: 'att-57', student_id: 'stu-02', subject: 'Compiler Design', date: '2026-11-07', status: 'Present' },
-            { id: 'att-58', student_id: 'stu-03', subject: 'Compiler Design', date: '2026-11-07', status: 'Absent' },
-            { id: 'att-59', student_id: 'stu-04', subject: 'Compiler Design', date: '2026-11-07', status: 'Present' },
-            { id: 'att-60', student_id: 'stu-05', subject: 'Compiler Design', date: '2026-11-07', status: 'Present' },
-
-            { id: 'att-61', student_id: 'stu-01', subject: 'Compiler Design', date: '2026-11-11', status: 'Present' },
-            { id: 'att-62', student_id: 'stu-02', subject: 'Compiler Design', date: '2026-11-11', status: 'Present' },
-            { id: 'att-63', student_id: 'stu-03', subject: 'Compiler Design', date: '2026-11-11', status: 'Present' },
-            { id: 'att-64', student_id: 'stu-04', subject: 'Compiler Design', date: '2026-11-11', status: 'Absent' },
-            { id: 'att-65', student_id: 'stu-05', subject: 'Compiler Design', date: '2026-11-11', status: 'Present' }
-          ],
-          assignments: [
-            {
-              id: 'asg-101',
-              subject: 'Software Engineering',
-              title: 'IEEE-830 SRS Document & Level-1 DFD Diagram',
-              due_date: '2026-11-20',
-              instructions: 'Prepare a complete Software Requirements Specification (SRS) and Level-1 Data Flow Diagram in Draw.io. Upload PDF to Google Drive with view access enabled.',
-              created_at: '2026-11-10T10:30:00Z'
-            },
-            {
-              id: 'asg-102',
-              subject: 'Database Management Systems',
-              title: 'B+ Tree Indexing & Normalization Lab Report',
-              due_date: '2026-11-24',
-              instructions: 'Submit SQL schema scripts and 3NF decomposition walkthrough via a public GitHub repository or Google Drive folder link.',
-              created_at: '2026-11-12T14:15:00Z'
-            }
-          ],
-          submissions: [
-            {
-              id: 'sub-501',
-              assignment_id: 'asg-101',
-              student_id: 'stu-02',
-              link_url: 'https://drive.google.com/file/d/priya-verma-srs-dfd-21CS002',
-              submitted_at: '2026-11-12T18:40:00Z'
-            }
-          ],
-          activities: [
-            { id: 'act-1', text: 'Priya Verma (21CS002) submitted IEEE-830 SRS Document', time: 'Yesterday, 6:40 PM', type: 'submission' },
-            { id: 'act-2', text: 'Published new assignment: B+ Tree Indexing & Normalization', time: 'Nov 12, 2:15 PM', type: 'assignment' },
-            { id: 'act-3', text: 'Attendance recorded for Database Management Systems', time: 'Nov 12, 11:00 AM', type: 'attendance' }
-          ]
-        };
-
-        this._saveDB(seedData);
-      },
-
-      _getDB() {
-        this.init();
-        return JSON.parse(localStorage.getItem(this.STORAGE_KEY));
-      },
-
-      _saveDB(db) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(db));
-      },
-
-      resetDB() {
-        localStorage.removeItem(this.STORAGE_KEY);
-        this.init();
-      },
-
-      // --- AUTHENTICATION METHODS ---
-      login(email, role) {
-        const db = this._getDB();
-        const normalizedEmail = email.trim().toLowerCase();
-        let user = db.users.find(u => u.email.toLowerCase() === normalizedEmail && u.role === role);
-        if (!user) {
-          // Fallback to default demo account for convenience if email isn't registered yet
-          user = db.users.find(u => u.role === role);
-        }
-        return user;
-      },
-
-      register({ name, email, role, roll_no }) {
-        const db = this._getDB();
-        const exists = db.users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
-        if (exists) {
-          return { error: 'An account with this email already exists.' };
-        }
-        const newUser = {
-          id: (role === 'faculty' ? 'fac-' : 'stu-') + Date.now(),
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          role,
-          roll_no: role === 'student' ? (roll_no.trim() || '21CS006') : undefined,
-          department: 'Computer Science & Engineering'
-        };
-        db.users.push(newUser);
-        this._saveDB(db);
-        return { user: newUser };
-      },
-
-      getDemoUser(role) {
-        const db = this._getDB();
-        return db.users.find(u => u.role === role);
-      },
-
-      // --- STUDENTS & ROSTER ---
-      getAllStudents() {
-        const db = this._getDB();
-        return db.users
-          .filter(u => u.role === 'student')
-          .sort((a, b) => (a.roll_no || '').localeCompare(b.roll_no || ''));
-      },
-
-      // --- ATTENDANCE OPERATIONS ---
-      getAttendanceForSession(subject, date) {
-        const db = this._getDB();
-        return db.attendance.filter(a => a.subject === subject && a.date === date);
-      },
-
-      saveAttendanceBatch(subject, date, records) {
-        // records: [{ student_id, status }]
-        const db = this._getDB();
-        // Remove existing records for the same subject + date (upsert behavior)
-        db.attendance = db.attendance.filter(a => !(a.subject === subject && a.date === date));
-
-        const newRows = records.map((r, idx) => ({
-          id: `att-${Date.now()}-${idx}`,
-          student_id: r.student_id,
-          subject,
-          date,
-          status: r.status
-        }));
-
-        db.attendance.push(...newRows);
-
-        const presentCount = records.filter(r => r.status === 'Present').length;
-        db.activities.unshift({
-          id: 'act-' + Date.now(),
-          text: `Attendance saved for ${subject} (${presentCount}/${records.length} Present)`,
-          time: 'Just now',
-          type: 'attendance'
-        });
-
-        this._saveDB(db);
-        return newRows;
-      },
-
-      getStudentAttendanceSummary(studentId) {
-        const db = this._getDB();
-        const studentLogs = db.attendance.filter(a => a.student_id === studentId);
-
-        const subjectStats = this.SUBJECTS.map(subject => {
-          const logs = studentLogs.filter(l => l.subject === subject);
-          const total = logs.length;
-          const attended = logs.filter(l => l.status === 'Present').length;
-          const percentage = total > 0 ? Math.round((attended / total) * 1000) / 10 : 100;
-          return {
-            subject,
-            attended,
-            total,
-            percentage,
-            isShortage: total > 0 && percentage < 75
-          };
-        });
-
-        const totalClasses = studentLogs.length;
-        const totalAttended = studentLogs.filter(l => l.status === 'Present').length;
-        const overallPercentage = totalClasses > 0 ? Math.round((totalAttended / totalClasses) * 1000) / 10 : 100;
-
-        // Sort logs descending by date
-        const sortedLogs = [...studentLogs].sort((a, b) => b.date.localeCompare(a.date));
-
-        return {
-          subjectStats,
-          overallPercentage,
-          totalAttended,
-          totalClasses,
-          shortageCount: subjectStats.filter(s => s.isShortage).length,
-          logs: sortedLogs
-        };
-      },
-
-      getClassAverageAttendance() {
-        const db = this._getDB();
-        if (db.attendance.length === 0) return 0;
-        const present = db.attendance.filter(a => a.status === 'Present').length;
-        return Math.round((present / db.attendance.length) * 1000) / 10;
-      },
-
-      // --- ASSIGNMENTS & SUBMISSIONS ---
-      getAssignments() {
-        const db = this._getDB();
-        return [...db.assignments].sort((a, b) => b.created_at.localeCompare(a.created_at));
-      },
-
-      createAssignment({ subject, title, due_date, instructions }) {
-        const db = this._getDB();
-        const newAsg = {
-          id: 'asg-' + Date.now(),
-          subject,
-          title: title.trim(),
-          due_date,
-          instructions: instructions.trim(),
-          created_at: new Date().toISOString()
-        };
-        db.assignments.unshift(newAsg);
-        db.activities.unshift({
-          id: 'act-' + Date.now(),
-          text: `Published assignment "${newAsg.title}" (${subject})`,
-          time: 'Just now',
-          type: 'assignment'
-        });
-        this._saveDB(db);
-        return newAsg;
-      },
-
-      getSubmissionsForAssignment(assignmentId) {
-        const db = this._getDB();
-        const students = this.getAllStudents();
-        return db.submissions
-          .filter(s => s.assignment_id === assignmentId)
-          .map(sub => {
-            const stu = students.find(u => u.id === sub.student_id) || { name: 'Unknown Student', roll_no: 'N/A' };
-            return { ...sub, studentName: stu.name, rollNo: stu.roll_no };
-          })
-          .sort((a, b) => b.submitted_at.localeCompare(a.submitted_at));
-      },
-
-      getStudentSubmission(assignmentId, studentId) {
-        const db = this._getDB();
-        return db.submissions.find(s => s.assignment_id === assignmentId && s.student_id === studentId) || null;
-      },
-
-      submitAssignmentWork(assignmentId, studentId, linkUrl) {
-        const db = this._getDB();
-        const student = db.users.find(u => u.id === studentId);
-        const assignment = db.assignments.find(a => a.id === assignmentId);
-
-        const existingIndex = db.submissions.findIndex(
-          s => s.assignment_id === assignmentId && s.student_id === studentId
-        );
-
-        const payload = {
-          id: existingIndex >= 0 ? db.submissions[existingIndex].id : 'sub-' + Date.now(),
-          assignment_id: assignmentId,
-          student_id: studentId,
-          link_url: linkUrl.trim(),
-          submitted_at: new Date().toISOString()
-        };
-
-        if (existingIndex >= 0) {
-          db.submissions[existingIndex] = payload;
-        } else {
-          db.submissions.push(payload);
-        }
-
-        db.activities.unshift({
-          id: 'act-' + Date.now(),
-          text: `${student ? student.name : 'Student'} submitted "${assignment ? assignment.title : 'Assignment'}"`,
-          time: 'Just now',
-          type: 'submission'
-        });
-
-        this._saveDB(db);
-        return payload;
-      },
-
-      getRecentActivities() {
-        const db = this._getDB();
-        return db.activities.slice(0, 6);
-      }
+    const profile = {
+      id: data.user.id,
+      full_name: fullName,
+      email,
+      role,
+      roll_no: role === "student" ? rollNo : null,
+      department: "CSE - 5th Sem"
     };
+    const { error: dbError } = await sb.from("users").insert([profile]);
+    if (dbError) throw new Error(dbError.message);
+    return profile;
+  },
+
+  // 2. Login existing user & fetch profile
+  async login({ email, password }) {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(error.message);
+
+    const { data: profile, error: profError } = await sb
+      .from("users")
+      .select("*")
+      .eq("id", data.user.id)
+      .single();
+    if (profError) throw new Error(profError.message);
+    return profile;
+  },
+
+  // 3. Fetch all registered students (for Faculty attendance sheet)
+  async getStudents() {
+    const { data, error } = await sb
+      .from("users")
+      .select("*")
+      .eq("role", "student")
+      .order("roll_no", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  // 4. Save attendance rows to PostgreSQL
+  async saveAttendance(records) {
+    const { error } = await sb.from("attendance").insert(records);
+    if (error) throw new Error(error.message);
+    return true;
+  },
+
+  // 5. Fetch attendance records (all for Faculty, or filtered for Student)
+  async getAttendance(studentId = null) {
+    let query = sb.from("attendance").select("*").order("date", { ascending: false });
+    if (studentId) query = query.eq("student_id", studentId);
+    const { data, error } = await query;
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  // 6. Create assignment (Faculty) & fetch all assignments
+  async createAssignment(assignment) {
+    const { data, error } = await sb.from("assignments").insert([assignment]).select().single();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async getAssignments() {
+    const { data, error } = await sb.from("assignments").select("*").order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  // 7. Submit Google Drive link (Student) & fetch submissions (Faculty)
+  async submitAssignment(submission) {
+    const { data, error } = await sb.from("submissions").insert([submission]).select().single();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  async getSubmissions() {
+    const { data, error } = await sb.from("submissions").select("*").order("submitted_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
+  }
+};
 
     /**
      * =========================================================================
@@ -1791,5 +1481,6 @@ const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
       AcademicAPI.init();
     });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
