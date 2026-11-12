@@ -6,14 +6,13 @@
   <title>Academic Automation System | B.Tech CSE Mini-Project</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS SDK (MUST load before createClient) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script>
-    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-const SUPABASE_KEY = "sb_publishable_YOUR_KEY_HERE";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     tailwind.config = {
       theme: {
         extend: {
@@ -42,11 +41,9 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       background-color: #f8fafc;
       color: #0f172a;
     }
-    /* Smooth progress bar transitions */
     .progress-fill {
       transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    /* Custom subtle scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -78,8 +75,8 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
           </span>
           <div>
-            <h3 class="font-bold text-base">Supabase BaaS Integration Guide</h3>
-            <p class="text-xs text-slate-400">Zero-Backend Architecture • 5th Sem Software Engineering</p>
+            <h3 class="font-bold text-base">Supabase Cloud Database Connected</h3>
+            <p class="text-xs text-slate-400">PostgreSQL BaaS • 5th Sem Software Engineering</p>
           </div>
         </div>
         <button onclick="closeSupabaseModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg transition">
@@ -88,54 +85,37 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       </div>
 
       <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-700">
-        <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-950">
-          <p class="font-semibold mb-1">How this app works right now:</p>
-          <p class="text-xs leading-relaxed text-indigo-800">
-            All CRUD operations are isolated inside the <code class="px-1.5 py-0.5 bg-white rounded font-mono text-indigo-700">AcademicAPI</code> service object in <code class="font-mono">index.html</code>. Currently, it persists data in <code class="font-mono">localStorage</code> so Faculty updates immediately reflect in the Student portal.
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950">
+          <p class="font-semibold mb-1">Live Cloud Persistence Active</p>
+          <p class="text-xs leading-relaxed text-emerald-800">
+            All registrations, logins, attendance records, assignments, and submission links are persisted directly to your live Supabase PostgreSQL database.
           </p>
         </div>
 
         <div>
-          <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-slate-900 text-white text-xs flex items-center justify-center">1</span>
-            Required Supabase PostgreSQL Tables
-          </h4>
+          <h4 class="font-bold text-slate-900 mb-2">Connected PostgreSQL Tables</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="p-3 rounded-xl border border-slate-200 bg-slate-50">
               <div class="font-mono font-bold text-xs text-indigo-700 mb-1">users</div>
-              <p class="text-xs text-slate-600"><code>id</code> (uuid, PK), <code>name</code> (text), <code>email</code> (text), <code>role</code> ('faculty'|'student'), <code>roll_no</code> (text)</p>
+              <p class="text-xs text-slate-600"><code>id</code>, <code>full_name</code>, <code>email</code>, <code>role</code>, <code>roll_no</code>, <code>department</code></p>
             </div>
             <div class="p-3 rounded-xl border border-slate-200 bg-slate-50">
               <div class="font-mono font-bold text-xs text-indigo-700 mb-1">attendance</div>
-              <p class="text-xs text-slate-600"><code>id</code> (uuid, PK), <code>student_id</code> (FK), <code>subject</code> (text), <code>date</code> (date), <code>status</code> ('Present'|'Absent')</p>
+              <p class="text-xs text-slate-600"><code>id</code>, <code>student_id</code>, <code>student_name</code>, <code>roll_no</code>, <code>subject</code>, <code>date</code>, <code>status</code></p>
             </div>
             <div class="p-3 rounded-xl border border-slate-200 bg-slate-50">
               <div class="font-mono font-bold text-xs text-indigo-700 mb-1">assignments</div>
-              <p class="text-xs text-slate-600"><code>id</code> (uuid, PK), <code>subject</code> (text), <code>title</code> (text), <code>due_date</code> (date), <code>instructions</code> (text)</p>
+              <p class="text-xs text-slate-600"><code>id</code>, <code>subject</code>, <code>title</code>, <code>deadline</code>, <code>description</code>, <code>created_by</code></p>
             </div>
             <div class="p-3 rounded-xl border border-slate-200 bg-slate-50">
               <div class="font-mono font-bold text-xs text-indigo-700 mb-1">submissions</div>
-              <p class="text-xs text-slate-600"><code>id</code> (uuid, PK), <code>assignment_id</code> (FK), <code>student_id</code> (FK), <code>link_url</code> (text), <code>submitted_at</code> (timestamptz)</p>
+              <p class="text-xs text-slate-600"><code>id</code>, <code>assignment_id</code>, <code>student_id</code>, <code>student_name</code>, <code>roll_no</code>, <code>drive_link</code></p>
             </div>
           </div>
         </div>
-
-        <div>
-          <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-slate-900 text-white text-xs flex items-center justify-center">2</span>
-            Connect Your Live Supabase Project
-          </h4>
-          <pre class="p-3.5 rounded-xl bg-slate-900 text-slate-100 text-xs font-mono overflow-x-auto leading-relaxed">// Inside AcademicAPI in index.html:
-const SUPABASE_URL = "https://zyaacsgsimuwngsawvoi.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
-// Replace localStorage calls with supabase.from('table').select/insert()</pre>
-        </div>
       </div>
 
-      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-        <button onclick="resetDemoDatabase()" class="px-4 py-2 rounded-xl text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition">
-          Reset Demo Data to Default
-        </button>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
         <button onclick="closeSupabaseModal()" class="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition">
           Got It
         </button>
@@ -147,7 +127,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
        VIEW 1: AUTHENTICATION SCREEN (LOGIN / REGISTER)
   ====================================================================== -->
   <div id="auth-view" class="min-h-screen flex flex-col lg:flex-row bg-slate-50">
-    <!-- Left Institutional Branding Panel -->
     <div class="lg:w-5/12 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
       <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-indigo-500/10 blur-2xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
@@ -172,7 +151,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
         </div>
 
         <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md mb-8">
-          Streamlined digital attendance tracking, automated 75% eligibility alerts, and cloud assignment submissions designed for modern engineering departments.
+          Streamlined digital attendance tracking, automated 75% eligibility alerts, and cloud assignment submissions powered by Supabase PostgreSQL.
         </p>
 
         <div class="space-y-3 text-xs text-slate-300">
@@ -186,7 +165,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
           </div>
           <div class="flex items-center gap-3">
             <div class="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-400/20 flex items-center justify-center text-indigo-300">✓</div>
-            <span>Modular Supabase-Ready Service Layer</span>
+            <span>Live Cloud Database Persistence on Supabase</span>
           </div>
         </div>
       </div>
@@ -202,31 +181,13 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
     <!-- Right Auth Form Panel -->
     <div class="lg:w-7/12 flex items-center justify-center p-6 sm:p-12">
       <div class="w-full max-w-md">
-        <!-- Quick Demo Evaluators Card -->
-        <div class="mb-6 p-4 rounded-2xl bg-white border border-indigo-100 shadow-sm">
-          <div class="flex items-center justify-between mb-2.5">
-            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">One-Click Viva / Evaluator Demo</span>
-            <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">No Password Needed</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button onclick="quickDemoLogin('faculty')" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition active:scale-[0.99]">
-              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              Demo Login as Faculty
-            </button>
-            <button onclick="quickDemoLogin('student')" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition active:scale-[0.99]">
-              <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-              Demo Login as Student
-            </button>
-          </div>
-        </div>
-
         <!-- Login / Register Card -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
           <div class="flex p-1 bg-slate-100 rounded-xl mb-6">
-            <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition">
+            <button id="tab-login" type="button" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition">
               Sign In
             </button>
-            <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">
+            <button id="tab-register" type="button" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">
               Create Account
             </button>
           </div>
@@ -256,23 +217,23 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
             <!-- Name Field (Register only) -->
             <div id="register-name-group" class="hidden">
               <label for="auth-name" class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
-              <input id="auth-name" type="text" placeholder="e.g., Ananya Roy" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <input id="auth-name" type="text" placeholder="e.g., Ankur Kumar" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
 
             <!-- Roll No Field (Register + Student only) -->
             <div id="register-roll-group" class="hidden">
               <label for="auth-roll" class="block text-xs font-semibold text-slate-700 mb-1">University Roll Number</label>
-              <input id="auth-roll" type="text" placeholder="e.g., 21CS006" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <input id="auth-roll" type="text" placeholder="e.g., 21CS001" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
 
             <div>
-              <label for="auth-email" class="block text-xs font-semibold text-slate-700 mb-1">Institutional Email</label>
-              <input id="auth-email" type="email" required value="aarav.sharma@cse.edu.in" placeholder="name@cse.edu.in" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <label for="auth-email" class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+              <input id="auth-email" type="email" required placeholder="you@college.edu.in" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
 
             <div>
-              <label for="auth-password" class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
-              <input id="auth-password" type="password" required value="student123" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <label for="auth-password" class="block text-xs font-semibold text-slate-700 mb-1">Password (min 6 characters)</label>
+              <input id="auth-password" type="password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
 
             <button id="auth-submit-btn" type="submit" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition active:scale-[0.99]">
@@ -281,7 +242,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
           </form>
 
           <p class="mt-4 text-center text-[11px] text-slate-500">
-            Default Student: <code class="text-slate-700">aarav.sharma@cse.edu.in</code> • Faculty: <code class="text-slate-700">faculty@cse.edu.in</code>
+            First time here? Click <strong>Create Account</strong> above to register a Faculty or Student user in Supabase.
           </p>
         </div>
       </div>
@@ -292,12 +253,9 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
        VIEW 2: MAIN APPLICATION SHELL (FACULTY & STUDENT PORTALS)
   ====================================================================== -->
   <div id="app-shell" class="hidden min-h-screen flex bg-slate-50">
-    <!-- Mobile Sidebar Backdrop -->
-    <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-xs hidden lg:hidden"></div>
+    <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 z-30 bg-slate-900/50 hidden lg:hidden"></div>
 
-    <!-- Sidebar Navigation -->
     <aside id="app-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-200 -translate-x-full lg:translate-x-0">
-      <!-- Brand Header -->
       <div class="h-16 px-6 flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
@@ -313,24 +271,14 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
         </button>
       </div>
 
-      <!-- Dynamic Navigation Links -->
       <nav id="sidebar-nav" class="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto"></nav>
-
-      <!-- Quick Role Switcher for Evaluators -->
-      <div class="p-4 m-3 rounded-xl bg-slate-800/80 border border-slate-700/80">
-        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Evaluator Quick Switch</div>
-        <button id="quick-switch-btn" onclick="switchRoleInstantly()" class="w-full py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold transition flex items-center justify-center gap-2">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-          <span id="quick-switch-label">Switch to Student View</span>
-        </button>
-      </div>
 
       <!-- User Profile Footer -->
       <div class="p-4 border-t border-slate-800 flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
-          <div id="user-avatar" class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">RK</div>
+          <div id="user-avatar" class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">US</div>
           <div class="min-w-0">
-            <div id="user-display-name" class="text-xs font-bold text-white truncate">Dr. Rajesh Kumar</div>
+            <div id="user-display-name" class="text-xs font-bold text-white truncate">User</div>
             <div id="user-display-sub" class="text-[11px] text-slate-400 truncate">CSE Department</div>
           </div>
         </div>
@@ -340,9 +288,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       </div>
     </aside>
 
-    <!-- Right Content Wrapper -->
     <div class="flex-1 flex flex-col min-w-0">
-      <!-- Top Header Bar -->
       <header class="h-16 bg-white border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-20">
         <div class="flex items-center gap-3">
           <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100">
@@ -354,140 +300,191 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
           </div>
         </div>
 
-        <!-- Database Status Pill (Supabase Ready) -->
         <button onclick="openSupabaseModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-medium transition">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="hidden md:inline">Database Status:</span>
-          <span class="font-semibold">Local Demo Mode (Supabase Ready)</span>
+          <span class="hidden md:inline">Database:</span>
+          <span class="font-semibold">Supabase PostgreSQL Live</span>
         </button>
       </header>
 
-      <!-- Main Dynamic View Container -->
       <main id="portal-content" class="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-6"></main>
     </div>
   </div>
 
   <!-- =====================================================================
-       APPLICATION JAVASCRIPT & SUPABASE-READY SERVICE LAYER
+       APPLICATION JAVASCRIPT & SUPABASE SERVICE LAYER
   ====================================================================== -->
   <script>
-    /**
-     * =========================================================================
-     * AcademicAPI: Modular Service Layer (Supabase BaaS Ready)
-     * -------------------------------------------------------------------------
-     * To connect your live Supabase project:
-     * 1. Include <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>
-     * 2. Initialize: const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-     * 3. Replace the localStorage operations below with async Supabase queries.
-     * =========================================================================
-     */
+    const SUPABASE_URL = "https://zyaacsgsimuwngsawvoi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const AcademicAPI = {
-  // 1. Register new user in Supabase Auth + 'users' table
-  async register({ fullName, email, password, role, rollNo }) {
-    const { data, error } = await sb.auth.signUp({ email, password });
-    if (error) throw new Error(error.message);
+      SUBJECTS: [
+        'Software Engineering (PCC-CS501)',
+        'Compiler Design (PCC-CS502)',
+        'Operating Systems (PCC-CS503)',
+        'Object Oriented Programming (PEC-IT501B)'
+      ],
 
-    const profile = {
-      id: data.user.id,
-      full_name: fullName,
-      email,
-      role,
-      roll_no: role === "student" ? rollNo : null,
-      department: "CSE - 5th Sem"
+      async register({ name, email, password, role, roll_no }) {
+        const { data, error } = await sb.auth.signUp({ email, password });
+        if (error) throw new Error(error.message);
+        if (!data.user) throw new Error('Signup failed. Please check your Supabase Auth settings.');
+
+        const profile = {
+          id: data.user.id,
+          full_name: name,
+          email,
+          role,
+          roll_no: role === 'student' ? (roll_no || '21CS000') : null,
+          department: 'CSE - 5th Sem'
+        };
+
+        const { error: dbError } = await sb.from('users').insert([profile]);
+        if (dbError) throw new Error(dbError.message);
+        return profile;
+      },
+
+      async login(email, password) {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) throw new Error(error.message);
+
+        const { data: profile, error: profError } = await sb
+          .from('users')
+          .select('*')
+          .eq('id', data.user.id)
+          .single();
+        if (profError) throw new Error('User profile not found in users table.');
+        return profile;
+      },
+
+      async getAllStudents() {
+        const { data, error } = await sb
+          .from('users')
+          .select('*')
+          .eq('role', 'student')
+          .order('roll_no', { ascending: true });
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+
+      async getAllAttendance() {
+        const { data, error } = await sb
+          .from('attendance')
+          .select('*')
+          .order('date', { ascending: false });
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+
+      async getAttendanceForSession(subject, date) {
+        const { data, error } = await sb
+          .from('attendance')
+          .select('*')
+          .eq('subject', subject)
+          .eq('date', date);
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+
+      async saveAttendanceBatch(subject, date, records, facultyName) {
+        await sb.from('attendance').delete().eq('subject', subject).eq('date', date);
+        const rows = records.map(r => ({
+          student_id: r.student_id,
+          student_name: r.student_name,
+          roll_no: r.roll_no,
+          subject,
+          date,
+          status: r.status,
+          marked_by: facultyName
+        }));
+        const { error } = await sb.from('attendance').insert(rows);
+        if (error) throw new Error(error.message);
+        return true;
+      },
+
+      computeStudentSummary(studentId, allLogs) {
+        const logs = allLogs.filter(l => l.student_id === studentId);
+        const subjectStats = this.SUBJECTS.map(subject => {
+          const subLogs = logs.filter(l => l.subject === subject);
+          const total = subLogs.length;
+          const attended = subLogs.filter(l => l.status === 'Present').length;
+          const percentage = total === 0 ? 100 : Math.round((attended / total) * 100);
+          return {
+            subject,
+            total,
+            attended,
+            percentage,
+            isShortage: total > 0 && percentage < 75
+          };
+        });
+
+        const totalClasses = logs.length;
+        const totalAttended = logs.filter(l => l.status === 'Present').length;
+        const overallPercentage = totalClasses === 0 ? 100 : Math.round((totalAttended / totalClasses) * 100);
+        const shortageCount = subjectStats.filter(s => s.isShortage).length;
+
+        return { logs, subjectStats, totalClasses, totalAttended, overallPercentage, shortageCount };
+      },
+
+      async createAssignment({ subject, title, due_date, instructions, created_by }) {
+        const { data, error } = await sb
+          .from('assignments')
+          .insert([{ subject, title, deadline: due_date, description: instructions, created_by }])
+          .select()
+          .single();
+        if (error) throw new Error(error.message);
+        return data;
+      },
+
+      async getAssignments() {
+        const { data, error } = await sb
+          .from('assignments')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+
+      async getSubmissions() {
+        const { data, error } = await sb
+          .from('submissions')
+          .select('*')
+          .order('submitted_at', { ascending: false });
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+
+      async submitAssignmentWork(assignmentId, student, linkUrl) {
+        await sb.from('submissions').delete().eq('assignment_id', assignmentId).eq('student_id', student.id);
+        const { data, error } = await sb
+          .from('submissions')
+          .insert([{
+            assignment_id: assignmentId,
+            student_id: student.id,
+            student_name: student.full_name,
+            roll_no: student.roll_no,
+            drive_link: linkUrl
+          }])
+          .select()
+          .single();
+        if (error) throw new Error(error.message);
+        return data;
+      }
     };
-    const { error: dbError } = await sb.from("users").insert([profile]);
-    if (dbError) throw new Error(dbError.message);
-    return profile;
-  },
 
-  // 2. Login existing user & fetch profile
-  async login({ email, password }) {
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) throw new Error(error.message);
-
-    const { data: profile, error: profError } = await sb
-      .from("users")
-      .select("*")
-      .eq("id", data.user.id)
-      .single();
-    if (profError) throw new Error(profError.message);
-    return profile;
-  },
-
-  // 3. Fetch all registered students (for Faculty attendance sheet)
-  async getStudents() {
-    const { data, error } = await sb
-      .from("users")
-      .select("*")
-      .eq("role", "student")
-      .order("roll_no", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data || [];
-  },
-
-  // 4. Save attendance rows to PostgreSQL
-  async saveAttendance(records) {
-    const { error } = await sb.from("attendance").insert(records);
-    if (error) throw new Error(error.message);
-    return true;
-  },
-
-  // 5. Fetch attendance records (all for Faculty, or filtered for Student)
-  async getAttendance(studentId = null) {
-    let query = sb.from("attendance").select("*").order("date", { ascending: false });
-    if (studentId) query = query.eq("student_id", studentId);
-    const { data, error } = await query;
-    if (error) throw new Error(error.message);
-    return data || [];
-  },
-
-  // 6. Create assignment (Faculty) & fetch all assignments
-  async createAssignment(assignment) {
-    const { data, error } = await sb.from("assignments").insert([assignment]).select().single();
-    if (error) throw new Error(error.message);
-    return data;
-  },
-
-  async getAssignments() {
-    const { data, error } = await sb.from("assignments").select("*").order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
-    return data || [];
-  },
-
-  // 7. Submit Google Drive link (Student) & fetch submissions (Faculty)
-  async submitAssignment(submission) {
-    const { data, error } = await sb.from("submissions").insert([submission]).select().single();
-    if (error) throw new Error(error.message);
-    return data;
-  },
-
-  async getSubmissions() {
-    const { data, error } = await sb.from("submissions").select("*").order("submitted_at", { ascending: false });
-    if (error) throw new Error(error.message);
-    return data || [];
-  }
-};
-
-    /**
-     * =========================================================================
-     * UI State & Controller
-     * =========================================================================
-     */
     const AppState = {
       currentUser: null,
-      authMode: 'login', // 'login' | 'register'
+      authMode: 'login',
       activeRoute: 'dashboard',
-      // Attendance form draft state
       selectedSubject: AcademicAPI.SUBJECTS[0],
       selectedDate: new Date().toISOString().split('T')[0],
-      rosterDraft: {}, // { studentId: 'Present' | 'Absent' }
-      // Student log filter
+      rosterDraft: {},
       studentLogFilter: 'ALL',
-      // Expanded assignment drawers for Faculty
       expandedAssignments: {}
     };
 
-    // --- TOAST FEEDBACK ---
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -511,17 +508,13 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       `;
       container.appendChild(toast);
 
-      requestAnimationFrame(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      });
-
+      requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
-      }, 3400);
+      }, 3600);
     }
 
-    // --- SUPABASE SCHEMA MODAL ---
     function openSupabaseModal() {
       const modal = document.getElementById('supabase-modal');
       modal.classList.remove('hidden');
@@ -534,17 +527,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       modal.classList.remove('flex');
     }
 
-    function resetDemoDatabase() {
-      AcademicAPI.resetDB();
-      closeSupabaseModal();
-      showToast('Demo database reset to initial 5th-sem CSE records.', 'success');
-      if (AppState.currentUser) {
-        AppState.currentUser = AcademicAPI.getDemoUser(AppState.currentUser.role);
-        renderAppShell();
-      }
-    }
-
-    // --- AUTHENTICATION HANDLERS ---
     function switchAuthTab(mode) {
       AppState.authMode = mode;
       const loginTab = document.getElementById('tab-login');
@@ -570,67 +552,56 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
     function toggleRollField() {
       const role = document.querySelector('input[name="role"]:checked').value;
       const rollGroup = document.getElementById('register-roll-group');
-      const emailInput = document.getElementById('auth-email');
-
       if (AppState.authMode === 'register' && role === 'student') {
         rollGroup.classList.remove('hidden');
       } else {
         rollGroup.classList.add('hidden');
       }
-
-      if (AppState.authMode === 'login') {
-        emailInput.value = role === 'faculty' ? 'faculty@cse.edu.in' : 'aarav.sharma@cse.edu.in';
-      }
     }
 
-    function handleAuthSubmit(event) {
+    async function handleAuthSubmit(event) {
       event.preventDefault();
-      const role = document.querySelector('input[name="role"]:checked').value;
-      const email = document.getElementById('auth-email').value;
+      const btn = document.getElementById('auth-submit-btn');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Connecting to Supabase...';
 
-      if (AppState.authMode === 'register') {
-        const name = document.getElementById('auth-name').value;
-        const roll_no = document.getElementById('auth-roll').value;
-        if (!name.trim()) {
-          showToast('Please enter your full name.', 'error');
-          return;
+      try {
+        const role = document.querySelector('input[name="role"]:checked').value;
+        const email = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value;
+
+        if (AppState.authMode === 'register') {
+          const name = document.getElementById('auth-name').value.trim();
+          const roll_no = document.getElementById('auth-roll').value.trim();
+          if (!name) throw new Error('Please enter your full name.');
+
+          const user = await AcademicAPI.register({ name, email, password, role, roll_no });
+          await enterPortal(user);
+          showToast(`Welcome, ${user.full_name}! Saved to Supabase.`);
+        } else {
+          const user = await AcademicAPI.login(email, password);
+          await enterPortal(user);
+          showToast(`Signed in as ${user.full_name} (${user.role.toUpperCase()})`);
         }
-        const res = AcademicAPI.register({ name, email, role, roll_no });
-        if (res.error) {
-          showToast(res.error, 'error');
-          return;
-        }
-        enterPortal(res.user);
-        showToast(`Welcome, ${res.user.name}! Account created.`);
-      } else {
-        const user = AcademicAPI.login(email, role);
-        enterPortal(user);
-        showToast(`Signed in as ${user.name} (${user.role.toUpperCase()})`);
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
       }
     }
 
-    function quickDemoLogin(role) {
-      const user = AcademicAPI.getDemoUser(role);
-      enterPortal(user);
-      showToast(`Quick Demo Login: ${user.name} (${role.toUpperCase()})`);
-    }
-
-    function switchRoleInstantly() {
-      const targetRole = AppState.currentUser.role === 'faculty' ? 'student' : 'faculty';
-      const user = AcademicAPI.getDemoUser(targetRole);
-      enterPortal(user);
-      showToast(`Switched to ${targetRole === 'faculty' ? 'Faculty' : 'Student'} Portal (${user.name})`);
-    }
-
-    function enterPortal(user) {
+    async function enterPortal(user) {
       AppState.currentUser = user;
       AppState.activeRoute = 'dashboard';
       document.getElementById('auth-view').classList.add('hidden');
       document.getElementById('app-shell').classList.remove('hidden');
-      renderAppShell();
+      await renderAppShell();
     }
 
-    function logoutUser() {
+    async function logoutUser() {
+      await sb.auth.signOut();
       AppState.currentUser = null;
       document.getElementById('app-shell').classList.add('hidden');
       document.getElementById('auth-view').classList.remove('hidden');
@@ -650,39 +621,30 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       }
     }
 
-    // --- NAVIGATION & SHELL RENDERING ---
-    function navigateTo(route) {
+    async function navigateTo(route) {
       AppState.activeRoute = route;
-      // Close mobile drawer if open
       const sidebar = document.getElementById('app-sidebar');
       if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
         toggleMobileSidebar();
       }
-      renderAppShell();
+      await renderAppShell();
     }
 
-    function renderAppShell() {
+    async function renderAppShell() {
       const user = AppState.currentUser;
       if (!user) return;
-
       const isFaculty = user.role === 'faculty';
 
-      // Update Sidebar User Info
       document.getElementById('sidebar-role-badge').textContent = isFaculty ? 'Faculty Portal' : 'Student Portal';
-      document.getElementById('user-display-name').textContent = user.name;
-      document.getElementById('user-display-sub').textContent = isFaculty ? 'CSE Faculty' : `Roll No: ${user.roll_no}`;
-      document.getElementById('user-avatar').textContent = user.name
+      document.getElementById('user-display-name').textContent = user.full_name;
+      document.getElementById('user-display-sub').textContent = isFaculty ? 'CSE Faculty' : `Roll No: ${user.roll_no || 'N/A'}`;
+      document.getElementById('user-avatar').textContent = (user.full_name || 'U')
         .split(' ')
         .map(n => n[0])
         .join('')
         .slice(0, 2)
         .toUpperCase();
 
-      document.getElementById('quick-switch-label').textContent = isFaculty
-        ? 'Switch to Student View'
-        : 'Switch to Faculty View';
-
-      // Define routes per role
       const routes = isFaculty
         ? [
             { id: 'dashboard', label: 'Dashboard Overview', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -698,15 +660,12 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       const activeObj = routes.find(r => r.id === AppState.activeRoute) || routes[0];
       document.getElementById('topbar-title').textContent = activeObj.label;
 
-      const navContainer = document.getElementById('sidebar-nav');
-      navContainer.innerHTML = routes
+      document.getElementById('sidebar-nav').innerHTML = routes
         .map(r => {
           const active = r.id === AppState.activeRoute;
           return `
             <button onclick="navigateTo('${r.id}')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-              active
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
+              active ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
             }">
               <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${r.icon}"/>
@@ -717,169 +676,125 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
         })
         .join('');
 
-      // Render Route Content
       const main = document.getElementById('portal-content');
-      if (isFaculty) {
-        if (AppState.activeRoute === 'dashboard') main.innerHTML = renderFacultyDashboard();
-        else if (AppState.activeRoute === 'attendance') {
-          loadRosterDraft();
-          main.innerHTML = renderFacultyAttendance();
-        } else if (AppState.activeRoute === 'assignments') main.innerHTML = renderFacultyAssignments();
-      } else {
-        if (AppState.activeRoute === 'dashboard') main.innerHTML = renderStudentDashboard();
-        else if (AppState.activeRoute === 'attendance') main.innerHTML = renderStudentAttendance();
-        else if (AppState.activeRoute === 'assignments') main.innerHTML = renderStudentAssignments();
+      main.innerHTML = `<div class="text-xs text-slate-500 py-8 text-center">Loading live data from Supabase...</div>`;
+
+      try {
+        if (isFaculty) {
+          if (AppState.activeRoute === 'dashboard') main.innerHTML = await renderFacultyDashboard();
+          else if (AppState.activeRoute === 'attendance') {
+            await loadRosterDraft();
+            main.innerHTML = await renderFacultyAttendance();
+          } else if (AppState.activeRoute === 'assignments') main.innerHTML = await renderFacultyAssignments();
+        } else {
+          if (AppState.activeRoute === 'dashboard') main.innerHTML = await renderStudentDashboard();
+          else if (AppState.activeRoute === 'attendance') main.innerHTML = await renderStudentAttendance();
+          else if (AppState.activeRoute === 'assignments') main.innerHTML = await renderStudentAssignments();
+        }
+      } catch (err) {
+        main.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">Database Error: ${err.message}</div>`;
       }
     }
 
     // =========================================================================
-    // FACULTY PORTAL VIEWS & ACTIONS
+    // FACULTY VIEWS & ACTIONS
     // =========================================================================
-    function renderFacultyDashboard() {
-      const students = AcademicAPI.getAllStudents();
-      const avgAttendance = AcademicAPI.getClassAverageAttendance();
-      const assignments = AcademicAPI.getAssignments();
-      const activities = AcademicAPI.getRecentActivities();
+    async function renderFacultyDashboard() {
+      const [students, allLogs, assignments] = await Promise.all([
+        AcademicAPI.getAllStudents(),
+        AcademicAPI.getAllAttendance(),
+        AcademicAPI.getAssignments()
+      ]);
+
+      const presentTotal = allLogs.filter(l => l.status === 'Present').length;
+      const avgAttendance = allLogs.length === 0 ? 100 : Math.round((presentTotal / allLogs.length) * 100);
 
       return `
-        <!-- KPI Row -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Total Enrolled Students</span>
-              <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Registered Students</div>
             <div class="text-2xl font-extrabold text-slate-900">${students.length}</div>
-            <div class="text-[11px] text-slate-500 mt-1">B.Tech CSE • Section A</div>
+            <div class="text-[11px] text-slate-500 mt-1">B.Tech CSE • 5th Sem</div>
           </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Avg. Class Attendance</span>
-              <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Avg. Class Attendance</div>
             <div class="text-2xl font-extrabold text-slate-900">${avgAttendance}%</div>
-            <div class="text-[11px] text-emerald-600 font-medium mt-1">Across 4 core subjects</div>
+            <div class="text-[11px] text-emerald-600 font-medium mt-1">${allLogs.length} total attendance logs</div>
           </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Active Assignments</span>
-              <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Active Assignments</div>
             <div class="text-2xl font-extrabold text-slate-900">${assignments.length}</div>
-            <div class="text-[11px] text-slate-500 mt-1">Open for student links</div>
+            <div class="text-[11px] text-slate-500 mt-1">Stored in Supabase</div>
           </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Subjects Assigned</span>
-              <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Core Subjects</div>
             <div class="text-2xl font-extrabold text-slate-900">${AcademicAPI.SUBJECTS.length}</div>
-            <div class="text-[11px] text-slate-500 mt-1">5th Semester Core</div>
+            <div class="text-[11px] text-slate-500 mt-1">5th Semester Curriculum</div>
           </div>
         </div>
 
-        <!-- Two-Column Section: Quick Actions + Recent Activity Feed -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Student Roster Summary -->
-          <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h3 class="text-sm font-bold text-slate-900">5th-Semester CSE Student Roster</h3>
-                <p class="text-xs text-slate-500">Live attendance standing across all subjects</p>
-              </div>
-              <button onclick="navigateTo('attendance')" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition">
-                + Mark Today's Attendance
-              </button>
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div class="px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Enrolled CSE Students</h3>
+              <p class="text-xs text-slate-500">Live roster fetched from Supabase <code>users</code> table</p>
             </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
-                    <th class="py-3 px-6">Roll No</th>
-                    <th class="py-3 px-4">Student Name</th>
-                    <th class="py-3 px-4">Overall %</th>
-                    <th class="py-3 px-6 text-right">Eligibility Status</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-xs">
-                  ${students
-                    .map(stu => {
-                      const summary = AcademicAPI.getStudentAttendanceSummary(stu.id);
-                      const isLow = summary.overallPercentage < 75;
-                      return `
-                        <tr class="hover:bg-slate-50/70 transition">
-                          <td class="py-3.5 px-6 font-mono font-semibold text-slate-700">${stu.roll_no}</td>
-                          <td class="py-3.5 px-4">
-                            <div class="font-semibold text-slate-900">${stu.name}</div>
-                            <div class="text-[11px] text-slate-400">${stu.email}</div>
-                          </td>
-                          <td class="py-3.5 px-4 font-bold ${isLow ? 'text-rose-600' : 'text-emerald-600'}">
-                            ${summary.overallPercentage}%
-                          </td>
-                          <td class="py-3.5 px-6 text-right">
-                            ${
-                              isLow
-                                ? '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">Shortage (&lt;75%)</span>'
-                                : '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Eligible (≥75%)</span>'
-                            }
-                          </td>
-                        </tr>
-                      `;
-                    })
-                    .join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Recent Activity Feed -->
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 flex flex-col">
-            <h3 class="text-sm font-bold text-slate-900 mb-1">Recent Activity Feed</h3>
-            <p class="text-xs text-slate-500 mb-4">Real-time database log updates</p>
-            <div class="space-y-4 flex-1">
-              ${activities
-                .map(
-                  act => `
-                  <div class="flex items-start gap-3">
-                    <span class="w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                      act.type === 'submission'
-                        ? 'bg-indigo-600'
-                        : act.type === 'assignment'
-                        ? 'bg-amber-500'
-                        : 'bg-emerald-500'
-                    }"></span>
-                    <div>
-                      <p class="text-xs font-medium text-slate-800 leading-snug">${act.text}</p>
-                      <span class="text-[11px] text-slate-400">${act.time}</span>
-                    </div>
-                  </div>
-                `
-                )
-                .join('')}
-            </div>
-            <button onclick="navigateTo('assignments')" class="mt-5 w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition">
-              Manage Assignments & Submissions
+            <button onclick="navigateTo('attendance')" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition">
+              + Mark Today's Attendance
             </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                  <th class="py-3 px-6">Roll No</th>
+                  <th class="py-3 px-4">Student Name</th>
+                  <th class="py-3 px-4">Overall %</th>
+                  <th class="py-3 px-6 text-right">Eligibility Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-xs">
+                ${
+                  students.length === 0
+                    ? '<tr><td colspan="4" class="py-6 px-6 text-center text-slate-500">No students registered yet. Create a Student account on the login page to see them appear here!</td></tr>'
+                    : students
+                        .map(stu => {
+                          const summary = AcademicAPI.computeStudentSummary(stu.id, allLogs);
+                          const isLow = summary.totalClasses > 0 && summary.overallPercentage < 75;
+                          return `
+                            <tr class="hover:bg-slate-50/70 transition">
+                              <td class="py-3.5 px-6 font-mono font-semibold text-slate-700">${stu.roll_no || '-'}</td>
+                              <td class="py-3.5 px-4">
+                                <div class="font-semibold text-slate-900">${stu.full_name}</div>
+                                <div class="text-[11px] text-slate-400">${stu.email}</div>
+                              </td>
+                              <td class="py-3.5 px-4 font-bold ${isLow ? 'text-rose-600' : 'text-emerald-600'}">
+                                ${summary.overallPercentage}%
+                              </td>
+                              <td class="py-3.5 px-6 text-right">
+                                ${
+                                  isLow
+                                    ? '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">Shortage (&lt;75%)</span>'
+                                    : '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Eligible (≥75%)</span>'
+                                }
+                              </td>
+                            </tr>
+                          `;
+                        })
+                        .join('')
+                }
+              </tbody>
+            </table>
           </div>
         </div>
       `;
     }
 
-    // --- FACULTY: DIGITAL ATTENDANCE MODULE ---
-    function loadRosterDraft() {
-      const students = AcademicAPI.getAllStudents();
-      const existing = AcademicAPI.getAttendanceForSession(AppState.selectedSubject, AppState.selectedDate);
+    async function loadRosterDraft() {
+      const [students, existing] = await Promise.all([
+        AcademicAPI.getAllStudents(),
+        AcademicAPI.getAttendanceForSession(AppState.selectedSubject, AppState.selectedDate)
+      ]);
       const draft = {};
       students.forEach(s => {
         const found = existing.find(e => e.student_id === s.id);
@@ -888,75 +803,88 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       AppState.rosterDraft = draft;
     }
 
-    function handleAttendanceFilterChange() {
+    async function handleAttendanceFilterChange() {
       AppState.selectedSubject = document.getElementById('att-subject-select').value;
       AppState.selectedDate = document.getElementById('att-date-input').value;
-      loadRosterDraft();
-      document.getElementById('portal-content').innerHTML = renderFacultyAttendance();
+      await loadRosterDraft();
+      document.getElementById('portal-content').innerHTML = await renderFacultyAttendance();
     }
 
-    function toggleStudentAttendance(studentId, status) {
+    async function toggleStudentAttendance(studentId, status) {
       AppState.rosterDraft[studentId] = status;
-      document.getElementById('portal-content').innerHTML = renderFacultyAttendance();
+      document.getElementById('portal-content').innerHTML = await renderFacultyAttendance();
     }
 
-    function markAllStudentsPresent() {
+    async function markAllStudentsPresent() {
       Object.keys(AppState.rosterDraft).forEach(id => {
         AppState.rosterDraft[id] = 'Present';
       });
-      document.getElementById('portal-content').innerHTML = renderFacultyAttendance();
+      document.getElementById('portal-content').innerHTML = await renderFacultyAttendance();
       showToast('All students marked Present in draft.');
     }
 
-    function saveAttendanceRoster() {
-      const records = Object.entries(AppState.rosterDraft).map(([student_id, status]) => ({
-        student_id,
-        status
-      }));
-      AcademicAPI.saveAttendanceBatch(AppState.selectedSubject, AppState.selectedDate, records);
-      const presentCount = records.filter(r => r.status === 'Present').length;
-      showToast(`Saved ${AppState.selectedSubject} attendance (${presentCount}/${records.length} Present) for ${AppState.selectedDate}!`);
-      document.getElementById('portal-content').innerHTML = renderFacultyAttendance();
+    async function saveAttendanceRoster() {
+      try {
+        const students = await AcademicAPI.getAllStudents();
+        if (students.length === 0) {
+          showToast('No registered students to save attendance for.', 'warning');
+          return;
+        }
+        const records = students.map(s => ({
+          student_id: s.id,
+          student_name: s.full_name,
+          roll_no: s.roll_no || 'N/A',
+          status: AppState.rosterDraft[s.id] || 'Present'
+        }));
+        await AcademicAPI.saveAttendanceBatch(
+          AppState.selectedSubject,
+          AppState.selectedDate,
+          records,
+          AppState.currentUser.full_name
+        );
+        const presentCount = records.filter(r => r.status === 'Present').length;
+        showToast(`Saved ${AppState.selectedSubject} (${presentCount}/${records.length} Present) to Supabase!`);
+        document.getElementById('portal-content').innerHTML = await renderFacultyAttendance();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
     }
 
-    function renderFacultyAttendance() {
-      const students = AcademicAPI.getAllStudents();
-      const existingRecords = AcademicAPI.getAttendanceForSession(AppState.selectedSubject, AppState.selectedDate);
+    async function renderFacultyAttendance() {
+      const [students, existingRecords] = await Promise.all([
+        AcademicAPI.getAllStudents(),
+        AcademicAPI.getAttendanceForSession(AppState.selectedSubject, AppState.selectedDate)
+      ]);
       const isAlreadySaved = existingRecords.length > 0;
       const presentCount = Object.values(AppState.rosterDraft).filter(v => v === 'Present').length;
 
       return `
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <!-- Controls Header -->
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
           <div class="p-6 border-b border-slate-200 bg-slate-50/60">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 max-w-2xl">
                 <div>
-                  <label for="att-subject-select" class="block text-xs font-bold text-slate-700 mb-1.5">Select Subject</label>
-                  <select id="att-subject-select" onchange="handleAttendanceFilterChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <label class="block text-xs font-bold text-slate-700 mb-1.5">Select Subject</label>
+                  <select id="att-subject-select" onchange="handleAttendanceFilterChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-800">
                     ${AcademicAPI.SUBJECTS.map(
                       sub => `<option value="${sub}" ${sub === AppState.selectedSubject ? 'selected' : ''}>${sub}</option>`
                     ).join('')}
                   </select>
                 </div>
-
                 <div>
-                  <label for="att-date-input" class="block text-xs font-bold text-slate-700 mb-1.5">Lecture Date</label>
-                  <input id="att-date-input" type="date" value="${AppState.selectedDate}" onchange="handleAttendanceFilterChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <label class="block text-xs font-bold text-slate-700 mb-1.5">Lecture Date</label>
+                  <input id="att-date-input" type="date" value="${AppState.selectedDate}" onchange="handleAttendanceFilterChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-800" />
                 </div>
               </div>
-
               <div class="flex flex-wrap items-center gap-2.5">
-                <button onclick="markAllStudentsPresent()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold transition">
+                <button type="button" onclick="markAllStudentsPresent()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold transition">
                   Mark All Present
                 </button>
-                <button onclick="saveAttendanceRoster()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition flex items-center gap-2">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <button type="button" onclick="saveAttendanceRoster()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition">
                   Save Attendance
                 </button>
               </div>
             </div>
-
             <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs">
               <div class="flex items-center gap-2">
                 <span class="font-semibold text-slate-700">Live Summary:</span>
@@ -966,14 +894,13 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
               <div>
                 ${
                   isAlreadySaved
-                    ? '<span class="text-indigo-700 font-semibold">✓ Existing record loaded for this date (editing updates database)</span>'
+                    ? '<span class="text-indigo-700 font-semibold">✓ Existing record loaded from Supabase</span>'
                     : '<span class="text-slate-500">New session roster — click Save Attendance to commit</span>'
                 }
               </div>
             </div>
           </div>
 
-          <!-- Student Roster Table -->
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
@@ -984,39 +911,35 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 text-sm">
-                ${students
-                  .map(stu => {
-                    const status = AppState.rosterDraft[stu.id] || 'Present';
-                    const isPresent = status === 'Present';
-                    return `
-                      <tr class="hover:bg-slate-50/70 transition">
-                        <td class="py-4 px-6 font-mono text-xs font-bold text-slate-700">${stu.roll_no}</td>
-                        <td class="py-4 px-4">
-                          <div class="font-semibold text-slate-900 text-xs sm:text-sm">${stu.name}</div>
-                          <div class="text-[11px] text-slate-400">${stu.email}</div>
-                        </td>
-                        <td class="py-4 px-6 text-right">
-                          <div class="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200">
-                            <button type="button" onclick="toggleStudentAttendance('${stu.id}', 'Present')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
-                              isPresent
-                                ? 'bg-emerald-600 text-white shadow-xs'
-                                : 'text-slate-600 hover:text-slate-900'
-                            }">
-                              Present
-                            </button>
-                            <button type="button" onclick="toggleStudentAttendance('${stu.id}', 'Absent')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
-                              !isPresent
-                                ? 'bg-rose-600 text-white shadow-xs'
-                                : 'text-slate-600 hover:text-slate-900'
-                            }">
-                              Absent
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    `;
-                  })
-                  .join('')}
+                ${
+                  students.length === 0
+                    ? '<tr><td colspan="3" class="py-6 px-6 text-center text-xs text-slate-500">No students registered yet. Register at least one Student account to mark attendance.</td></tr>'
+                    : students
+                        .map(stu => {
+                          const status = AppState.rosterDraft[stu.id] || 'Present';
+                          const isPresent = status === 'Present';
+                          return `
+                            <tr class="hover:bg-slate-50/70 transition">
+                              <td class="py-4 px-6 font-mono text-xs font-bold text-slate-700">${stu.roll_no || '-'}</td>
+                              <td class="py-4 px-4">
+                                <div class="font-semibold text-slate-900 text-xs sm:text-sm">${stu.full_name}</div>
+                                <div class="text-[11px] text-slate-400">${stu.email}</div>
+                              </td>
+                              <td class="py-4 px-6 text-right">
+                                <div class="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200">
+                                  <button type="button" onclick="toggleStudentAttendance('${stu.id}', 'Present')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
+                                    isPresent ? 'bg-emerald-600 text-white' : 'text-slate-600'
+                                  }">Present</button>
+                                  <button type="button" onclick="toggleStudentAttendance('${stu.id}', 'Absent')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
+                                    !isPresent ? 'bg-rose-600 text-white' : 'text-slate-600'
+                                  }">Absent</button>
+                                </div>
+                              </td>
+                            </tr>
+                          `;
+                        })
+                        .join('')
+                }
               </tbody>
             </table>
           </div>
@@ -1024,65 +947,66 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       `;
     }
 
-    // --- FACULTY: ASSIGNMENTS & SUBMISSIONS MODULE ---
-    function handleCreateAssignment(event) {
+    async function handleCreateAssignment(event) {
       event.preventDefault();
-      const subject = document.getElementById('asg-subject').value;
-      const title = document.getElementById('asg-title').value;
-      const due_date = document.getElementById('asg-due').value;
-      const instructions = document.getElementById('asg-instructions').value;
+      try {
+        const subject = document.getElementById('asg-subject').value;
+        const title = document.getElementById('asg-title').value.trim();
+        const due_date = document.getElementById('asg-due').value;
+        const instructions = document.getElementById('asg-instructions').value.trim();
 
-      if (!title.trim() || !due_date) {
-        showToast('Please fill in the assignment title and due date.', 'error');
-        return;
+        await AcademicAPI.createAssignment({
+          subject,
+          title,
+          due_date,
+          instructions,
+          created_by: AppState.currentUser.full_name
+        });
+        showToast(`Published "${title}" to Supabase!`);
+        document.getElementById('portal-content').innerHTML = await renderFacultyAssignments();
+      } catch (err) {
+        showToast(err.message, 'error');
       }
-
-      AcademicAPI.createAssignment({ subject, title, due_date, instructions });
-      showToast(`Published "${title}" to Student Portal!`);
-      document.getElementById('portal-content').innerHTML = renderFacultyAssignments();
     }
 
-    function toggleSubmissionsDrawer(assignmentId) {
+    async function toggleSubmissionsDrawer(assignmentId) {
       AppState.expandedAssignments[assignmentId] = !AppState.expandedAssignments[assignmentId];
-      document.getElementById('portal-content').innerHTML = renderFacultyAssignments();
+      document.getElementById('portal-content').innerHTML = await renderFacultyAssignments();
     }
 
-    function renderFacultyAssignments() {
-      const assignments = AcademicAPI.getAssignments();
-      const totalStudents = AcademicAPI.getAllStudents().length;
+    async function renderFacultyAssignments() {
+      const [assignments, allSubmissions, students] = await Promise.all([
+        AcademicAPI.getAssignments(),
+        AcademicAPI.getSubmissions(),
+        AcademicAPI.getAllStudents()
+      ]);
       const defaultDue = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
 
       return `
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <!-- Left: Publish Assignment Form -->
           <div class="lg:col-span-5">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sticky top-24">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 sticky top-24">
               <h3 class="text-sm font-bold text-slate-900 mb-1">Publish New Assignment / Notice</h3>
-              <p class="text-xs text-slate-500 mb-5">Immediately visible to all 5th-sem CSE students</p>
-
+              <p class="text-xs text-slate-500 mb-5">Saved directly to Supabase <code>assignments</code> table</p>
               <form onsubmit="handleCreateAssignment(event)" class="space-y-4">
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">Subject</label>
-                  <select id="asg-subject" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <select id="asg-subject" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm">
                     ${AcademicAPI.SUBJECTS.map(s => `<option value="${s}">${s}</option>`).join('')}
                   </select>
                 </div>
-
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">Assignment Title</label>
-                  <input id="asg-title" type="text" required placeholder="e.g., Dining Philosophers Deadlock Simulation" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <input id="asg-title" type="text" required placeholder="e.g., Dining Philosophers Simulation" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
                 </div>
-
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">Submission Deadline</label>
-                  <input id="asg-due" type="date" required value="${defaultDue}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <input id="asg-due" type="date" required value="${defaultDue}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
                 </div>
-
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Instructions & Submission Format</label>
-                  <textarea id="asg-instructions" rows="3" required placeholder="Specify deliverables and ask students to paste a Google Drive or GitHub link..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Instructions</label>
+                  <textarea id="asg-instructions" rows="3" required placeholder="Ask students to submit a Google Drive or GitHub link..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
                 </div>
-
                 <button type="submit" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition">
                   Publish Assignment
                 </button>
@@ -1090,149 +1014,110 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
             </div>
           </div>
 
-          <!-- Right: Posted Assignments & Expandable Submissions Drawer -->
           <div class="lg:col-span-7 space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-bold text-slate-900">Published Assignments (${assignments.length})</h3>
-              <span class="text-xs text-slate-500">Click drawer to inspect student links</span>
-            </div>
-
-            ${assignments
-              .map(asg => {
-                const submissions = AcademicAPI.getSubmissionsForAssignment(asg.id);
-                const isExpanded = !!AppState.expandedAssignments[asg.id];
-
-                return `
-                  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-                    <div class="p-5">
-                      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[11px] font-bold">
-                          ${asg.subject}
-                        </span>
-                        <span class="text-xs font-semibold text-slate-500">
-                          Due: <span class="text-slate-800">${asg.due_date}</span>
-                        </span>
-                      </div>
-
-                      <h4 class="text-base font-bold text-slate-900 mb-1.5">${asg.title}</h4>
-                      <p class="text-xs text-slate-600 leading-relaxed mb-4">${asg.instructions}</p>
-
-                      <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-                        <div class="text-xs font-semibold text-slate-700">
-                          Submissions Received:
-                          <span class="ml-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            ${submissions.length} / ${totalStudents} Students
-                          </span>
-                        </div>
-
-                        <button onclick="toggleSubmissionsDrawer('${asg.id}')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
-                          <span>${isExpanded ? 'Hide' : 'View'} Student Submissions</span>
-                          <svg class="w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    ${
-                      isExpanded
-                        ? `
-                        <div class="bg-slate-50 border-t border-slate-200 p-5">
-                          <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Submitted Work Links</h5>
+            <h3 class="text-sm font-bold text-slate-900">Published Assignments (${assignments.length})</h3>
+            ${
+              assignments.length === 0
+                ? '<div class="bg-white rounded-2xl border border-slate-200 p-6 text-xs text-slate-500">No assignments posted yet. Use the form on the left to publish one!</div>'
+                : assignments
+                    .map(asg => {
+                      const submissions = allSubmissions.filter(s => s.assignment_id === asg.id);
+                      const isExpanded = !!AppState.expandedAssignments[asg.id];
+                      return `
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                          <div class="p-5">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                              <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[11px] font-bold">${asg.subject}</span>
+                              <span class="text-xs font-semibold text-slate-500">Due: <strong class="text-slate-800">${asg.deadline}</strong></span>
+                            </div>
+                            <h4 class="text-base font-bold text-slate-900 mb-1.5">${asg.title}</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">${asg.description || ''}</p>
+                            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                              <div class="text-xs font-semibold text-slate-700">
+                                Submissions: <span class="ml-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">${submissions.length} / ${students.length} Students</span>
+                              </div>
+                              <button type="button" onclick="toggleSubmissionsDrawer('${asg.id}')" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+                                ${isExpanded ? 'Hide' : 'View'} Student Submissions
+                              </button>
+                            </div>
+                          </div>
                           ${
-                            submissions.length === 0
-                              ? '<p class="text-xs text-slate-500 italic">No student links submitted yet for this assignment.</p>'
-                              : `<div class="space-y-2.5">
-                                  ${submissions
-                                    .map(
-                                      sub => `
-                                      <div class="p-3 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                        <div>
-                                          <div class="text-xs font-bold text-slate-900">
-                                            ${sub.studentName} <span class="font-mono text-slate-500 font-normal">(${sub.rollNo})</span>
-                                          </div>
-                                          <a href="${sub.link_url}" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:underline break-all font-medium">
-                                            ${sub.link_url}
-                                          </a>
-                                        </div>
-                                        <span class="text-[11px] text-slate-400 shrink-0">
-                                          ${new Date(sub.submitted_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-                                        </span>
-                                      </div>
-                                    `
-                                    )
-                                    .join('')}
+                            isExpanded
+                              ? `<div class="bg-slate-50 border-t border-slate-200 p-5">
+                                  <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Submitted Work Links</h5>
+                                  ${
+                                    submissions.length === 0
+                                      ? '<p class="text-xs text-slate-500 italic">No submissions yet.</p>'
+                                      : `<div class="space-y-2.5">
+                                          ${submissions
+                                            .map(
+                                              sub => `
+                                              <div class="p-3 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <div>
+                                                  <div class="text-xs font-bold text-slate-900">${sub.student_name} <span class="font-mono text-slate-500 font-normal">(${sub.roll_no || ''})</span></div>
+                                                  <a href="${sub.drive_link}" target="_blank" rel="noopener noreferrer" class="text-xs text-indigo-600 hover:underline break-all font-medium">${sub.drive_link}</a>
+                                                </div>
+                                                <span class="text-[11px] text-slate-400 shrink-0">${new Date(sub.submitted_at).toLocaleDateString()}</span>
+                                              </div>
+                                            `
+                                            )
+                                            .join('')}
+                                        </div>`
+                                  }
                                 </div>`
+                              : ''
                           }
                         </div>
-                      `
-                        : ''
-                    }
-                  </div>
-                `;
-              })
-              .join('')}
+                      `;
+                    })
+                    .join('')
+            }
           </div>
         </div>
       `;
     }
 
     // =========================================================================
-    // STUDENT PORTAL VIEWS & ACTIONS
+    // STUDENT VIEWS & ACTIONS
     // =========================================================================
-    function renderStudentDashboard() {
+    async function renderStudentDashboard() {
       const user = AppState.currentUser;
-      const summary = AcademicAPI.getStudentAttendanceSummary(user.id);
-      const assignments = AcademicAPI.getAssignments();
-      const pendingCount = assignments.filter(a => !AcademicAPI.getStudentSubmission(a.id, user.id)).length;
+      const [allLogs, assignments, allSubmissions] = await Promise.all([
+        AcademicAPI.getAllAttendance(),
+        AcademicAPI.getAssignments(),
+        AcademicAPI.getSubmissions()
+      ]);
+      const summary = AcademicAPI.computeStudentSummary(user.id, allLogs);
+      const mySubs = allSubmissions.filter(s => s.student_id === user.id);
+      const pendingCount = assignments.filter(a => !mySubs.some(s => s.assignment_id === a.id)).length;
 
       return `
-        <!-- Student KPI Row -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Overall Attendance</span>
-              <span class="w-9 h-9 rounded-xl ${summary.overallPercentage >= 75 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Overall Attendance</div>
             <div class="text-2xl font-extrabold text-slate-900">${summary.overallPercentage}%</div>
             <div class="text-[11px] text-slate-500 mt-1">${summary.totalAttended} of ${summary.totalClasses} classes attended</div>
           </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Subjects Below 75% Alert</span>
-              <span class="w-9 h-9 rounded-xl ${summary.shortageCount > 0 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Subjects Below 75% Alert</div>
             <div class="text-2xl font-extrabold ${summary.shortageCount > 0 ? 'text-rose-600' : 'text-emerald-600'}">${summary.shortageCount}</div>
-            <div class="text-[11px] text-slate-500 mt-1">${summary.shortageCount > 0 ? 'Action required to avoid exam detention' : 'All subjects meet 75% criteria'}</div>
+            <div class="text-[11px] text-slate-500 mt-1">${summary.shortageCount > 0 ? 'Attendance shortage warning' : 'All subjects meet 75% criteria'}</div>
           </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500">Pending Assignments</span>
-              <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </span>
-            </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Pending Assignments</div>
             <div class="text-2xl font-extrabold text-slate-900">${pendingCount}</div>
             <div class="text-[11px] text-slate-500 mt-1">Out of ${assignments.length} active tasks</div>
           </div>
         </div>
 
-        <!-- Subject Attendance Progress Snapshot -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <div class="flex items-center justify-between mb-5">
             <div>
               <h3 class="text-sm font-bold text-slate-900">Subject-Wise Attendance Standing</h3>
-              <p class="text-xs text-slate-500">Minimum 75% attendance required per subject for End-Semester Exams</p>
+              <p class="text-xs text-slate-500">Live records synced from Supabase</p>
             </div>
-            <button onclick="navigateTo('attendance')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
-              View Date-Wise Logs →
-            </button>
+            <button onclick="navigateTo('attendance')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">View Logs →</button>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             ${summary.subjectStats
               .map(stat => {
@@ -1241,52 +1126,12 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
                   <div class="p-4 rounded-xl border ${isLow ? 'border-rose-200 bg-rose-50/30' : 'border-slate-200 bg-slate-50/50'}">
                     <div class="flex items-center justify-between gap-2 mb-2">
                       <span class="text-xs font-bold text-slate-900">${stat.subject}</span>
-                      ${
-                        isLow
-                          ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700">Shortage (${stat.percentage}%)</span>`
-                          : `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700">${stat.percentage}%</span>`
-                      }
+                      <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${isLow ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${stat.percentage}%</span>
                     </div>
                     <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden mb-2">
                       <div class="progress-fill h-full rounded-full ${isLow ? 'bg-rose-500' : 'bg-emerald-500'}" style="width: ${stat.percentage}%"></div>
                     </div>
-                    <div class="flex items-center justify-between text-[11px] text-slate-500">
-                      <span>Attended: <strong>${stat.attended}</strong> / ${stat.total} lectures</span>
-                      <span>${isLow ? 'Attend next classes!' : 'Safe zone'}</span>
-                    </div>
-                  </div>
-                `;
-              })
-              .join('')}
-          </div>
-        </div>
-
-        <!-- Active Assignments Quick List -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-bold text-slate-900">Recent Assignments</h3>
-            <button onclick="navigateTo('assignments')" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition">
-              Go to Submissions
-            </button>
-          </div>
-          <div class="divide-y divide-slate-100">
-            ${assignments
-              .map(asg => {
-                const sub = AcademicAPI.getStudentSubmission(asg.id, user.id);
-                return `
-                  <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <span class="text-[11px] font-bold text-indigo-600">${asg.subject}</span>
-                      <div class="text-xs font-bold text-slate-900">${asg.title}</div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                      <span class="text-[11px] text-slate-500">Due: ${asg.due_date}</span>
-                      ${
-                        sub
-                          ? '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Submitted</span>'
-                          : '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Pending</span>'
-                      }
-                    </div>
+                    <div class="text-[11px] text-slate-500">Attended: <strong>${stat.attended}</strong> / ${stat.total} lectures</div>
                   </div>
                 `;
               })
@@ -1296,70 +1141,34 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       `;
     }
 
-    // --- STUDENT: MY ATTENDANCE MODULE ---
-    function filterStudentLogs(subject) {
+    async function filterStudentLogs(subject) {
       AppState.studentLogFilter = subject;
-      document.getElementById('portal-content').innerHTML = renderStudentAttendance();
+      document.getElementById('portal-content').innerHTML = await renderStudentAttendance();
     }
 
-    function renderStudentAttendance() {
+    async function renderStudentAttendance() {
       const user = AppState.currentUser;
-      const summary = AcademicAPI.getStudentAttendanceSummary(user.id);
+      const allLogs = await AcademicAPI.getAllAttendance();
+      const summary = AcademicAPI.computeStudentSummary(user.id, allLogs);
       const filteredLogs =
         AppState.studentLogFilter === 'ALL'
           ? summary.logs
           : summary.logs.filter(l => l.subject === AppState.studentLogFilter);
 
       return `
-        <!-- Subject Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          ${summary.subjectStats
-            .map(stat => {
-              const isLow = stat.isShortage;
-              return `
-                <div class="bg-white p-5 rounded-2xl border ${isLow ? 'border-rose-300' : 'border-slate-200'} shadow-xs flex flex-col justify-between">
-                  <div>
-                    <div class="flex items-start justify-between gap-2 mb-3">
-                      <h4 class="text-xs font-bold text-slate-900 leading-snug">${stat.subject}</h4>
-                      ${
-                        isLow
-                          ? '<span class="shrink-0 px-2 py-0.5 rounded-md bg-rose-100 text-rose-700 text-[10px] font-extrabold uppercase">Warning</span>'
-                          : '<span class="shrink-0 px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-[10px] font-extrabold uppercase">OK</span>'
-                      }
-                    </div>
-                    <div class="text-2xl font-extrabold ${isLow ? 'text-rose-600' : 'text-emerald-600'} mb-2">
-                      ${stat.percentage}%
-                    </div>
-                  </div>
-                  <div>
-                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-2">
-                      <div class="progress-fill h-full rounded-full ${isLow ? 'bg-rose-500' : 'bg-emerald-500'}" style="width: ${stat.percentage}%"></div>
-                    </div>
-                    <div class="text-[11px] text-slate-500">
-                      Classes Attended: <strong class="text-slate-800">${stat.attended} / ${stat.total}</strong>
-                    </div>
-                  </div>
-                </div>
-              `;
-            })
-            .join('')}
-        </div>
-
-        <!-- Date-Wise Attendance Log Table -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
           <div class="px-6 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
             <div>
               <h3 class="text-sm font-bold text-slate-900">Date-Wise Attendance Log</h3>
               <p class="text-xs text-slate-500">Synced directly with Faculty attendance register</p>
             </div>
-            <select onchange="filterStudentLogs(this.value)" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <select onchange="filterStudentLogs(this.value)" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-700">
               <option value="ALL" ${AppState.studentLogFilter === 'ALL' ? 'selected' : ''}>All Subjects</option>
               ${AcademicAPI.SUBJECTS.map(
                 sub => `<option value="${sub}" ${AppState.studentLogFilter === sub ? 'selected' : ''}>${sub}</option>`
               ).join('')}
             </select>
           </div>
-
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
@@ -1370,23 +1179,27 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 text-xs">
-                ${filteredLogs
-                  .map(
-                    log => `
-                    <tr class="hover:bg-slate-50/70 transition">
-                      <td class="py-3.5 px-6 font-mono font-semibold text-slate-700">${log.date}</td>
-                      <td class="py-3.5 px-4 font-semibold text-slate-900">${log.subject}</td>
-                      <td class="py-3.5 px-6 text-right">
-                        ${
-                          log.status === 'Present'
-                            ? '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Present</span>'
-                            : '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Absent</span>'
-                        }
-                      </td>
-                    </tr>
-                  `
-                  )
-                  .join('')}
+                ${
+                  filteredLogs.length === 0
+                    ? '<tr><td colspan="3" class="py-6 px-6 text-center text-slate-500">No attendance marked for you yet.</td></tr>'
+                    : filteredLogs
+                        .map(
+                          log => `
+                          <tr>
+                            <td class="py-3.5 px-6 font-mono font-semibold text-slate-700">${log.date}</td>
+                            <td class="py-3.5 px-4 font-semibold text-slate-900">${log.subject}</td>
+                            <td class="py-3.5 px-6 text-right">
+                              ${
+                                log.status === 'Present'
+                                  ? '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Present</span>'
+                                  : '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Absent</span>'
+                              }
+                            </td>
+                          </tr>
+                        `
+                        )
+                        .join('')
+                }
               </tbody>
             </table>
           </div>
@@ -1394,93 +1207,70 @@ const SUPABASE_ANON_KEY = "sb_publishable_0V570RERWZBbr-Mxm7eZig_UfrWS7p5";
       `;
     }
 
-    // --- STUDENT: ASSIGNMENTS & SUBMISSION MODULE ---
-    function handleStudentSubmission(event, assignmentId) {
+    async function handleStudentSubmission(event, assignmentId) {
       event.preventDefault();
-      const input = document.getElementById(`sub-link-${assignmentId}`);
-      const url = input.value.trim();
-      if (!url) {
-        showToast('Please paste a valid Google Drive or GitHub link.', 'error');
-        return;
+      try {
+        const url = document.getElementById(`sub-link-${assignmentId}`).value.trim();
+        await AcademicAPI.submitAssignmentWork(assignmentId, AppState.currentUser, url);
+        showToast('Work link submitted to Supabase!');
+        document.getElementById('portal-content').innerHTML = await renderStudentAssignments();
+      } catch (err) {
+        showToast(err.message, 'error');
       }
-      AcademicAPI.submitAssignmentWork(assignmentId, AppState.currentUser.id, url);
-      showToast('Assignment work link submitted! Faculty can now view it.');
-      document.getElementById('portal-content').innerHTML = renderStudentAssignments();
     }
 
-    function renderStudentAssignments() {
+    async function renderStudentAssignments() {
       const user = AppState.currentUser;
-      const assignments = AcademicAPI.getAssignments();
+      const [assignments, allSubmissions] = await Promise.all([
+        AcademicAPI.getAssignments(),
+        AcademicAPI.getSubmissions()
+      ]);
 
       return `
         <div class="space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h3 class="text-sm font-bold text-slate-900">Course Assignments & Lab Submissions</h3>
-              <p class="text-xs text-slate-500">Paste your public Google Drive PDF link or GitHub repository URL below</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 gap-4">
-            ${assignments
-              .map(asg => {
-                const existingSub = AcademicAPI.getStudentSubmission(asg.id, user.id);
-                return `
-                  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-                      <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[11px] font-bold">
-                        ${asg.subject}
-                      </span>
-                      <div class="flex items-center gap-2.5">
-                        <span class="text-xs text-slate-500">Due: <strong class="text-slate-800">${asg.due_date}</strong></span>
-                        ${
-                          existingSub
-                            ? '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Submitted</span>'
-                            : '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Pending</span>'
-                        }
+          <h3 class="text-sm font-bold text-slate-900">Course Assignments & Lab Submissions</h3>
+          ${
+            assignments.length === 0
+              ? '<div class="bg-white rounded-2xl border border-slate-200 p-6 text-xs text-slate-500">No assignments published by Faculty yet.</div>'
+              : assignments
+                  .map(asg => {
+                    const existingSub = allSubmissions.find(s => s.assignment_id === asg.id && s.student_id === user.id);
+                    return `
+                      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                          <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[11px] font-bold">${asg.subject}</span>
+                          <div class="flex items-center gap-2.5">
+                            <span class="text-xs text-slate-500">Due: <strong class="text-slate-800">${asg.deadline}</strong></span>
+                            ${
+                              existingSub
+                                ? '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Submitted</span>'
+                                : '<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Pending</span>'
+                            }
+                          </div>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">${asg.title}</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">${asg.description || ''}</p>
+                        <form onsubmit="handleStudentSubmission(event, '${asg.id}')" class="flex flex-col sm:flex-row gap-2.5 pt-4 border-t border-slate-100">
+                          <input
+                            id="sub-link-${asg.id}"
+                            type="url"
+                            required
+                            value="${existingSub ? existingSub.drive_link : ''}"
+                            placeholder="https://drive.google.com/... or https://github.com/..."
+                            class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm"
+                          />
+                          <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition shrink-0">
+                            ${existingSub ? 'Update Link' : 'Submit Work'}
+                          </button>
+                        </form>
                       </div>
-                    </div>
-
-                    <h4 class="text-base font-bold text-slate-900 mb-1.5">${asg.title}</h4>
-                    <p class="text-xs text-slate-600 leading-relaxed mb-4">${asg.instructions}</p>
-
-                    <form onsubmit="handleStudentSubmission(event, '${asg.id}')" class="flex flex-col sm:flex-row gap-2.5 pt-4 border-t border-slate-100">
-                      <input
-                        id="sub-link-${asg.id}"
-                        type="url"
-                        required
-                        value="${existingSub ? existingSub.link_url : ''}"
-                        placeholder="https://drive.google.com/... or https://github.com/..."
-                        class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      />
-                      <button type="submit" class="px-5 py-2.5 rounded-xl ${
-                        existingSub ? 'bg-slate-900 hover:bg-slate-800' : 'bg-indigo-600 hover:bg-indigo-700'
-                      } text-white text-xs font-bold shadow-sm transition shrink-0">
-                        ${existingSub ? 'Update Link' : 'Submit Work'}
-                      </button>
-                    </form>
-
-                    ${
-                      existingSub
-                        ? `<div class="mt-2 text-[11px] text-emerald-700 font-medium">
-                            Last submitted on ${new Date(existingSub.submitted_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-                          </div>`
-                        : ''
-                    }
-                  </div>
-                `;
-              })
-              .join('')}
-          </div>
+                    `;
+                  })
+                  .join('')
+          }
         </div>
       `;
     }
-
-    // Initialize seed data on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      AcademicAPI.init();
-    });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
